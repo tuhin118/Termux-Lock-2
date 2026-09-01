@@ -20,9 +20,11 @@ new_salt(){
 
 setup(){
   mkdir -p "$CFG"
+
   local a b s r rs
 
   while :; do
+
     printf 'New password: '
     IFS= read -r -s a || exit 1
     printf '\n'
@@ -43,7 +45,7 @@ setup(){
 
     s="$(new_salt)"
 
-    # Generate a random 5-character recovery code.
+    # Generate a random 5-character recovery code
     r="$(tr -dc 'A-Za-z0-9' < /dev/urandom | head -c 5)"
 
     rs="$(new_salt)"
@@ -59,16 +61,21 @@ setup(){
     clear
 
     echo '========================================'
-    echo ' PASSWORD SETUP COMPLETE'
+    echo '       PASSWORD SETUP COMPLETE'
     echo '========================================'
+    echo
     echo "Recovery Code: $r"
     echo
-    echo 'IMPORTANT: Save this Recovery Code somewhere safe.'
-    echo 'It is the only built-in way to reset a forgotten password.'
-    echo 'The old password cannot be displayed/recovered.'
+    echo 'IMPORTANT!'
+    echo 'Save this Recovery Code somewhere safe.'
+    echo 'It is the only built-in way to reset'
+    echo 'a forgotten password.'
+    echo
+    echo 'The old password cannot be displayed.'
     echo '========================================'
 
     unset a b s r rs
+
     return
   done
 }
@@ -100,6 +107,7 @@ verify_recovery(){
 }
 
 reset_password(){
+
   local a b s
 
   if ! verify_recovery; then
@@ -108,6 +116,7 @@ reset_password(){
   fi
 
   while :; do
+
     printf 'New password: '
     IFS= read -r -s a || return 1
     printf '\n'
@@ -135,32 +144,42 @@ reset_password(){
 
     unset a b s
 
-    echo 'Password reset successfully. Access granted.'
+    echo 'Password reset successfully.'
+    echo 'Access granted.'
+
     return 0
   done
 }
 
 lock(){
+
   trap 'echo; echo "Locked. Enter password or use the Recovery Code."' INT TSTP QUIT
 
-  local n=0 choice
+  local n=0
+  local choice
 
   while :; do
+
     ui_lock 2>/dev/null || clear
 
     echo '1) Password'
     echo '2) Recovery Code (reset password)'
+    echo
 
     printf 'Choose [1/2]: '
     IFS= read -r choice || exit 1
     printf '\n'
 
     case "$choice" in
+
       1)
         if verify; then
+
           trap - INT TSTP QUIT
+
           clear
           echo 'Access granted.'
+
           return
         fi
 
@@ -174,9 +193,12 @@ lock(){
 
       2)
         if reset_password; then
+
           trap - INT TSTP QUIT
+
           clear
           echo 'Access granted.'
+
           return
         fi
         ;;
@@ -185,7 +207,9 @@ lock(){
         echo 'Invalid choice.'
         sleep 1
         ;;
+
     esac
+
   done
 }
 
@@ -206,9 +230,11 @@ case "${1:-lock}" in
     ;;
 
   status)
-    [ -f "$HASH" ] && [ -f "$RHASH" ] &&
-      echo 'Termux Lock: configured (recovery enabled)' ||
+    if [ -f "$HASH" ] && [ -f "$RHASH" ]; then
+      echo 'Termux Lock: configured (recovery enabled)'
+    else
       echo 'Termux Lock: not configured'
+    fi
     ;;
 
   uninstall)
