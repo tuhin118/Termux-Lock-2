@@ -20,11 +20,11 @@ During setup you will receive a Recovery PIN immediately after setting the passw
 
 ## Commands
 ```bash
-termux-lock
-termux-lock passwd
-termux-lock recover
-termux-lock status
-termux-lock uninstall
+termux-lock-2
+termux-lock-2 passwd
+termux-lock-2 recover
+termux-lock-2 status
+termux-lock-2 uninstall
 ```
 
 ## Security note
