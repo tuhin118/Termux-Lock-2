@@ -11,7 +11,7 @@ A new random 12-digit Recovery PIN is generated during setup. Save it somewhere 
 ## Install
 ```bash
 pkg install git -y
-git clone https://github.com/tuhin118/termux-lock.git
+git clone https://github.com/tuhin118/Termux-Lock-2
 cd termux-lock
 bash install.sh
 ```
